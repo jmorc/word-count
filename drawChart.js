@@ -1,66 +1,57 @@
-    var oneDayAgo = new Date('Tue Feb 06 2015 10:49:01 GMT-0700 (PDT)');
+var oneDayAgo = new Date('Tue Feb 06 2015 10:49:01 GMT-0700 (PDT)');
     // oneDayAgo is hard-coded because the API does not seem to return 
     // keywords from the past day (it looks like the latest ones are March
     // in one data set I examined)
 
-    function drawChart(data, keywords) {
-        var counts = {};
-        var maxCount = 0;
-        var wordCounts = [];
-    
-        for (var i = 0; i < data.mentions.length; i++ ) {
-          if (new Date(data.mentions[i].time) > oneDayAgo) {
-              if ( counts[data.mentions[i].keyword] ) {
-                  counts[data.mentions[i].keyword] += 1;
-              } else {
-                  counts[data.mentions[i].keyword] = 1
-              }
+function drawChart(data, keywords) {
+    var counts = {};
+    var maxCount = 0;
+    var wordCounts = [];
+
+    for (var i = 0; i < data.mentions.length; i++ ) {
+      if (new Date(data.mentions[i].time) > oneDayAgo) {
+          if ( counts[data.mentions[i].keyword] ) {
+              counts[data.mentions[i].keyword] += 1;
+          } else {
+              counts[data.mentions[i].keyword] = 1
           }
+      }
+    }
+
+    if ( typeof keywords === 'undefined' ) {
+        keywords = [];
+        for ( entry in counts ) {
+            keywords.push(entry);
+            wordCounts.push(counts[entry]);
         }
-
-        if ( typeof keywords === 'undefined' ) {
-            keywords = [];
-            for ( entry in counts ) {
-                keywords.push(entry);
-                wordCounts.push(counts[entry]);
-            }
-        } else {
-            for ( var i = 0; i < keywords.length; i++ ) {
-                wordCounts.push(counts[keywords[i]]);
-            }
+    } else {
+        for ( var i = 0; i < keywords.length; i++ ) {
+            wordCounts.push(counts[keywords[i]]);
         }
+    }
 
-        var range = [10];
-        for ( var i = 1; i < keywords.length; i++ ) {
-            range.push((i * 20) + 10)
-        }
+    var range = [10];
+    for ( var i = 1; i < keywords.length; i++ ) {
+        range.push((i * 20) + 10)
+    }
 
-        console.log(wordCounts)
-        console.log(keywords)
+    var min = d3.min(wordCounts);
+    var max = d3.max(wordCounts);
 
-        var min = d3.min(wordCounts);
-        var max = d3.max(wordCounts);
-    
-        var barHeight = 20;
-        var margin = {top: 20, right: 30, bottom: 30, left: 100},
-            width = 420 - margin.left - margin.right,
-            height = barHeight * keywords.length;
-    
-        var x = d3.scale.linear()
-            .domain([0, max])
-            .range([0, width]);
-    
-        var y = d3.scale.ordinal()
-            .domain(keywords)
-            .range(range);
+    var barHeight = 20;
+    var margin = {top: 20, right: 30, bottom: 30, left: 100},
+        width = 420 - margin.left - margin.right,
+        height = barHeight * keywords.length;
 
-        var chart = d3.select("#chartFrame");
+    var x = d3.scale.linear()
+        .domain([0, max])
+        .range([0, width]);
 
-        // var chart = d3.select(".chart")
-        //     .attr("width", width + margin.left + margin.right)
-        //     .attr("height", height + margin.top + margin.bottom)
-        //     .append("g")
-        //     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var y = d3.scale.ordinal()
+        .domain(keywords)
+        .range(range);
+
+    var chart = d3.select("#chartFrame");
 
     var bar = chart.selectAll(".bar")
         .data(wordCounts)
@@ -105,22 +96,22 @@
     }
 
 
-    var form = document.getElementById('select_form');
+var form = document.getElementById('select_form');
 
-    form.addEventListener("submit", function(event) {
-        var keywords = [];
-        event.preventDefault();
-        var options = document.getElementById("selector").selectedOptions;
+form.addEventListener("submit", function(event) {
+    var keywords = [];
+    event.preventDefault();
+    var options = document.getElementById("selector").selectedOptions;
 
-        for (var i = 0; i < options.length; i++) {
-            keywords.push(options[i].value)
+    for (var i = 0; i < options.length; i++) {
+        keywords.push(options[i].value)
+    }
+
+    d3.json('./data.json', function(error, data) {
+        if ( error ) {
+            return console.warn(error);
+        } else {
+            drawChart(data, keywords);
         }
-
-        d3.json('./data.json', function(error, data) {
-            if ( error ) {
-                return console.warn(error);
-            } else {
-                drawChart(data, keywords);
-            }
-        });
     });
+});
