@@ -1,0 +1,43 @@
+form {
+  float: left;
+  margin-left: 100px;
+  margin-top: 30px;
+}
+
+.directions {
+  display: block;
+}
+
+.clearfix {
+  overflow: auto;
+}
+
+.chart {
+  margin-left: 100px;
+  float:left;
+}
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+
+.axis text {
+  font: 10px sans-serif;
+  fill: black;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.y.axis path {
+  display: none;
+}
