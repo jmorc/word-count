@@ -107,7 +107,7 @@ form.addEventListener("submit", function(event) {
         keywords.push(options[i].value)
     }
 
-    d3.json('./data.json', function(error, data) {
+    d3.json('http://accuvit-frontend-challenge.herokuapp.com/', function(error, data) {
         if ( error ) {
             return console.warn(error);
         } else {
