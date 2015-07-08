@@ -23,7 +23,6 @@
           }
         }
 
-
         if ( typeof keywords === 'undefined' ) {
             keywords = [];
             for ( entry in counts ) {
@@ -37,9 +36,18 @@
         }
         var height = barHeight * keywords.length;
 
-        console.log(counts);
-        console.log(keywords);
-        console.log(wordCounts);
+        // console.log(counts);
+        // console.log(keywords);
+        // console.log(wordCounts);
+
+        var chartData = [];
+        for ( var i = 0; i < keywords.length; i++ ) {
+            chartData[i] = {};
+            chartData[i].name = keywords[i];
+            chartData[i].count = wordCounts[i];
+        }
+
+        // console.log(chartData);
 
         var range = [10];
         for ( var i = 1; i < keywords.length; i++ ) {
@@ -60,7 +68,7 @@
         axes.remove();
 
         var bar = chart.selectAll("g.bar")
-             .data(wordCounts);
+             .data(chartData);
 
         bar.enter()
             .append("g")
@@ -68,17 +76,17 @@
             .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
 
         bar.append("rect")
-            .attr("width", function(d) { return x(d); })
+            .attr("width", function(d) { return x(d.count); })
             .attr("height", barHeight - 1)
 
         bar.append("g")
                 .append("text")
-                .attr("x", function(d) { return x(d) - 3; })
+                .attr("x", function(d) { return x(d.count) - 3; })
                 .attr("y", barHeight / 2)
                 .attr("dy", ".35em")
-                .text(function(d) { return d; })
-                .style('color', 'black');
+                .text(function(d) { return d.count; })
 
+        // console.log(bar.exit())
         bar.exit().remove();
 
         var xAxis = d3.svg.axis()
