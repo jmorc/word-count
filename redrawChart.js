@@ -29,9 +29,9 @@
             }
         }
 
-        var range = [10];
-        for ( var i = 1; i < keywords.length; i++ ) {
-            range.push((i * 20) + 10)
+        var range = [90];
+        for ( var i = keywords.length - 1; i > 0; i-- ) {
+            range.unshift(range[0] - 20)
         }
 
         var x = d3.scale.linear()
@@ -67,7 +67,6 @@
         bar.transition()
            .duration(1000)
            .attr("transform", function(d, i) { return "translate(0," + (y(d.name) - barHeight/2) + ")"; })
-
 
         bar.exit().remove()
 

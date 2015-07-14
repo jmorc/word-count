@@ -43,9 +43,9 @@
             chartData[i].count = wordCounts[i];
         }
 
-        var range = [10];
-        for ( var i = 1; i < keywords.length; i++ ) {
-            range.push((i * 20) + 10)
+        var range = [90];
+        for ( var i = keywords.length - 1; i > 0; i-- ) {
+            range.unshift(range[0] - 20)
         }
 
         var min = d3.min(wordCounts);
