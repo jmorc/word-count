@@ -2,7 +2,7 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" type="text/css" href="styles.css">
-  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="./d3.min.js"></script>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
   <div class="clearfix">
     <form id='select_form'>
         <select multiple size="7" id="selector">
-          <option value='peaches'>Peaches</option>
+          <option value='peaches'>peaches</option>
           <option value='pineapples'>pineapples</option>
           <option value='bananas'>bananas</option>
           <option value='apples'>apples</option>
@@ -23,11 +23,9 @@
     </form>
 
     <div class="loader">Loading...</div>
-
-    <svg class="chart"></svg>
   </div>
 
-
+  <svg class="chart"></svg>
 
   <div class="directions">
     <ul>
@@ -38,6 +36,7 @@
 
   <script src="./buildChart.js"></script>
   <script src="./drawChart.js"></script>
+    <script src="./redrawChart.js"></script>
   <script src="./formListener.js"></script>
   <script src="./dataQuery.js"></script>
 </body>

@@ -36,18 +36,12 @@
         }
         var height = barHeight * keywords.length;
 
-        // console.log(counts);
-        // console.log(keywords);
-        // console.log(wordCounts);
-
-        var chartData = [];
+        window.chartData = [];
         for ( var i = 0; i < keywords.length; i++ ) {
             chartData[i] = {};
             chartData[i].name = keywords[i];
             chartData[i].count = wordCounts[i];
         }
-
-        // console.log(chartData);
 
         var range = [10];
         for ( var i = 1; i < keywords.length; i++ ) {
@@ -68,26 +62,24 @@
         axes.remove();
 
         var bar = chart.selectAll("g.bar")
-             .data(chartData);
+             .data(chartData, function(d) { return d.name });
+
+        bar.exit().remove();
 
         bar.enter()
-            .append("g")
+            .append("svg:g")
             .classed("bar", true)
-            .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+            .attr("transform", function(d, i) { return "translate(0," + (y(d.name) - barHeight/2) + ")"; });
 
-        bar.append("rect")
+        bar.append("svg:rect")
             .attr("width", function(d) { return x(d.count); })
-            .attr("height", barHeight - 1)
+            .attr("height", barHeight - 1);
 
-        bar.append("g")
-                .append("text")
+        bar.append("svg:text")
                 .attr("x", function(d) { return x(d.count) - 3; })
                 .attr("y", barHeight / 2)
                 .attr("dy", ".35em")
-                .text(function(d) { return d.count; })
-
-        // console.log(bar.exit())
-        bar.exit().remove();
+                .text(function(d) { return d.count; });
 
         var xAxis = d3.svg.axis()
             .scale(x)
@@ -97,12 +89,12 @@
             .scale(y)
             .orient("left");
     
-        chart.append("g")
+        chart.append("svg:g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
     
-        chart.append("g")
+        chart.append("svg:g")
             .attr("class", "y axis")
             .call(yAxis);
     }

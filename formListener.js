@@ -10,6 +10,7 @@
             keywords.push(options[i].value)
         }
 
-        drawChart(window.my_data, keywords);
+        // drawChart(window.my_data, keywords);
+        redrawChart(window.chartData, keywords);
     });
 })();
