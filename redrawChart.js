@@ -1,21 +1,12 @@
 (function(){
-    
-    // oneDayAgo is hard-coded because the API does not seem to return 
-    // keywords from the past day (it looks like the latest ones are March
-    // in one data set I examined)
-
     window.redrawChart = function (chartData, keywords) {
-        var oneDayAgo = new Date('Tue Feb 06 2015 10:49:01 GMT-0700 (PDT)');
-        var counts = {};
-        var maxCount = 0;
-        var wordCounts = [];
         var barHeight = 20;
         var margin = {top: 20, right: 30, bottom: 30, left: 100};
         var width = 420 - margin.left - margin.right;
-        var height = barHeight * keywords.length;
         var redrawData = [];
         var k = 0;
         var max = 0;
+        var range = [90];
 
         for ( var i = 0; i < 5; i++ ) {
             if ( chartData[i].count > max ) max = chartData[i].count;
@@ -29,7 +20,6 @@
             }
         }
 
-        var range = [90];
         for ( var i = keywords.length - 1; i > 0; i-- ) {
             range.unshift(range[0] - 20)
         }

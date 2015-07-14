@@ -9,8 +9,6 @@
         for (var i = 0; i < options.length; i++) {
             keywords.push(options[i].value)
         }
-
-        // drawChart(window.my_data, keywords);
         redrawChart(window.chartData, keywords);
     });
 })();

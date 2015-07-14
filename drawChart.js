@@ -5,13 +5,14 @@
     // in one data set I examined)
 
     window.drawChart = function (data, keywords) {
+        window.chartData = [];
         var oneDayAgo = new Date('Tue Feb 06 2015 10:49:01 GMT-0700 (PDT)');
         var counts = {};
-        var maxCount = 0;
         var wordCounts = [];
         var barHeight = 20;
         var margin = {top: 20, right: 30, bottom: 30, left: 100};
         var width = 420 - margin.left - margin.right;
+        var height = barHeight * keywords.length;
 
         for (var i = 0; i < data.mentions.length; i++ ) {
           if (new Date(data.mentions[i].time) > oneDayAgo) {
@@ -23,20 +24,10 @@
           }
         }
 
-        if ( typeof keywords === 'undefined' ) {
-            keywords = [];
-            for ( entry in counts ) {
-                keywords.push(entry);
-                wordCounts.push(counts[entry]);
-            }
-        } else {
-            for ( var i = 0; i < keywords.length; i++ ) {
-                wordCounts.push(counts[keywords[i]]);
-            }
+        for ( var i = 0; i < keywords.length; i++ ) {
+            wordCounts.push(counts[keywords[i]]);
         }
-        var height = barHeight * keywords.length;
 
-        window.chartData = [];
         for ( var i = 0; i < keywords.length; i++ ) {
             chartData[i] = {};
             chartData[i].name = keywords[i];
@@ -48,7 +39,6 @@
             range.unshift(range[0] - 20)
         }
 
-        var min = d3.min(wordCounts);
         var max = d3.max(wordCounts);
         var x = d3.scale.linear()
                   .domain([0, max])
@@ -58,16 +48,10 @@
                   .range(range);
 
         var chart = d3.select("#chartFrame");
-        var axes = chart.selectAll('.axis');
-        axes.remove();
-
         var bar = chart.selectAll("g.bar")
              .data(chartData, function(d) { return d.name });
 
-        bar.exit().remove();
-
-        bar.enter()
-            .append("svg:g")
+        bar.enter().append("svg:g")
             .classed("bar", true)
             .attr("transform", function(d, i) { return "translate(0," + (y(d.name) - barHeight/2) + ")"; });
 
